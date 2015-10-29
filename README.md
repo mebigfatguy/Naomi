@@ -60,5 +60,3 @@ Matcher. For some tutorial examples see src/SimpleExamples.java. For an
 illustration of Naomi's power see src/DateTime.java.
 
 
-
-
