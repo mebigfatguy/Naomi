@@ -33,19 +33,22 @@
 package org.naomi.regex;
 
 /**
+ *
+ * The constants defined by this Enum specify what action to take when more than one match is found by one of the {@link Utilities#find Utilities.find} methods.
+ *
+ */
 
-The constants defined by this Enum specify what action to take when more than
-one match is found by one of the {@link Utilities#find Utilities.find}
-methods.
-
-*/
-
-public enum Action
-{
-  /** Select first match */ first,
-  /** Select last match */ last,
-  /** Return null */       nul,
-  /** Throw {@link Utilities.SearchException }*/ exception,
-  ;
-  public String toString() {return getClass().getSimpleName()+"."+name();}
+public enum Action {
+    /** Select first match */
+    first,
+    /** Select last match */
+    last,
+    /** Return null */
+    nul,
+    /** Throw {@link Utilities.SearchException } */
+    exception,;
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "." + name();
+    }
 }

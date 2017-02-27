@@ -33,13 +33,13 @@
 package org.naomi.regex;
 
 /**
-The constants defined by this enum are <code>left</code> and <code>right</code>.
+ * The constants defined by this enum are <code>left</code> and <code>right</code>.
  */
 
-public enum Side
-{
-  left,
-  right,
-;
-  public String toString() {return getClass().getSimpleName()+"."+name();}
+public enum Side {
+    left, right,;
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "." + name();
+    }
 }

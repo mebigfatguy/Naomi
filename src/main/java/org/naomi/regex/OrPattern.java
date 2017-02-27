@@ -32,22 +32,24 @@
  */
 package org.naomi.regex;
 
-import java.util.*;
-
 /**
-An OrPattern matches any string matched by at least one of the specified
-instances of {@link Pattern}.
-*/
+ * An OrPattern matches any string matched by at least one of the specified instances of {@link Pattern}.
+ */
 
-public class OrPattern extends Patterns
-{
-  public OrPattern(Object ... obs) {super(obs);}
-  String getDelimiter() {return "|";}
+public class OrPattern extends Patterns {
+    public OrPattern(Object... obs) {
+        super(obs);
+    }
 
-  public  OrPattern copy()
-  {
-     OrPattern ans=new OrPattern();
-     copyTo(ans);
-     return ans;
-  }
+    @Override
+    String getDelimiter() {
+        return "|";
+    }
+
+    @Override
+    public OrPattern copy() {
+        OrPattern ans = new OrPattern();
+        copyTo(ans);
+        return ans;
+    }
 }

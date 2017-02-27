@@ -30,54 +30,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package  org.naomi.regex;
+package org.naomi.regex;
 
-import java.util.Collections;
+class CountAndPolicyRope extends Rope {
+    final private Count count;
+    final private Policy policy;
 
-class CountAndPolicyRope extends Rope
-{
-  final private Count count;
-  final private Policy policy;
+    CountAndPolicyRope(Count count, Policy policy) {
+        this.count = count;
+        this.policy = policy;
+        kids = null;
+        if (isTrivial()) {
+            startEncloser = null;
+            endEncloser = null;
+        } else {
+            startEncloser = "(?:";
+            endEncloser = ")" + count.toString() + policy.getIntroduction();
+            endComment = getEndComment();
+        }
+    }
 
-  CountAndPolicyRope(Count count,Policy policy)
-  {
-     this.count=count;
-     this.policy=policy;
-     kids=null;
-     if(isTrivial())
-     {
-        startEncloser=null;
-        endEncloser=null;
-     }
-     else
-     {
-        startEncloser="(?:";
-        endEncloser=")"+count.toString()+policy.getIntroduction();
-        endComment=getEndComment();
-     }
-  }
+    private boolean isTrivial() {
+        return count.isDefault();
+    }
 
-  private boolean isTrivial() {return count.isDefault();}
+    @Override
+    CharSequence getKidIndentIncrement(Rope kid, Pretty pretty) {
+        if (isTrivial()) {
+            return "";
+        } else {
+            return pretty.indenter;
+        }
+    }
 
-  CharSequence getKidIndentIncrement(Rope kid, Pretty pretty)
-  {
-     if(isTrivial())
-        return "";
-     else
-        return pretty.indenter;
-  }
-
-  CharSequence getEndComment()
-  {
-     CharSequence countComment=count.toString(null,Verbose.yes);
-     CharSequence policyComment=policy.toString(null,Verbose.yes);
-     if(policyComment.length() == 0)
-        return countComment;
-     else if(countComment.length() == 0)
-        return policyComment;
-     else
-        return countComment+" "+policyComment;
-  }
-
+    CharSequence getEndComment() {
+        CharSequence countComment = count.toString(null, Verbose.yes);
+        CharSequence policyComment = policy.toString(null, Verbose.yes);
+        if (policyComment.length() == 0) {
+            return countComment;
+        } else if (countComment.length() == 0) {
+            return policyComment;
+        } else {
+            return countComment + " " + policyComment;
+        }
+    }
 
 }

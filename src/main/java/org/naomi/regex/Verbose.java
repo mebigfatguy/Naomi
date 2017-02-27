@@ -33,16 +33,14 @@
 package org.naomi.regex;
 
 /**
-
-The constants defined by this enum are <code>no</code>, <code>yes</code> and
-<code>very</code>.
-
-*/
-public enum Verbose
-{
-  no,
-  yes,
-  very,
-  ;
-  public String toString() {return getClass().getSimpleName()+"."+name();}
+ *
+ * The constants defined by this enum are <code>no</code>, <code>yes</code> and <code>very</code>.
+ *
+ */
+public enum Verbose {
+    no, yes, very,;
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "." + name();
+    }
 }

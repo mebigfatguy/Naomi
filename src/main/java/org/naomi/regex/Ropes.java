@@ -32,28 +32,26 @@
  */
 package org.naomi.regex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-class Ropes extends Rope
-{
-  Ropes(List<RopeClient> clients,String delimiter)
-  {
-      kids=getKids(clients,delimiter);
-  }
+class Ropes extends Rope {
+    Ropes(List<RopeClient> clients, String delimiter) {
+        kids = getKids(clients, delimiter);
+    }
 
-  private List<Rope> getKids(List<RopeClient> clients,String delimiter)
-  {
-     List<Rope> ans=new ArrayList<Rope>();
-     if(delimiter != null && delimiter.length() == 0)
-        delimiter=null;
-     for(RopeClient client:clients)
-     {
-        if(delimiter != null && ans.size() > 0)
-           ans.add(new CharSequenceRope(delimiter));
-         ans.add(client.getRope());
-     }
-     return ans;
-  }
-
+    private List<Rope> getKids(List<RopeClient> clients, String delimiter) {
+        List<Rope> ans = new ArrayList<>();
+        if ((delimiter != null) && (delimiter.length() == 0)) {
+            delimiter = null;
+        }
+        for (RopeClient client : clients) {
+            if ((delimiter != null) && (ans.size() > 0)) {
+                ans.add(new CharSequenceRope(delimiter));
+            }
+            ans.add(client.getRope());
+        }
+        return ans;
+    }
 
 }

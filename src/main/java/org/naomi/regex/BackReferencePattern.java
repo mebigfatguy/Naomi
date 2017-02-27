@@ -35,76 +35,84 @@ package org.naomi.regex;
 import java.util.List;
 
 /**
+ *
+ * An instance of this {@link Pattern} matches the same string matched by some previously matched Pattern (specified by the <code>referent</code> argument of
+ * the BackReferencePattern Constructor).
+ *
+ * <p>
+ * Example:
+ * <p>
+ *
+ * <pre>
+ * Pattern vowel = new ExplicitCharClass("aeiou");
+ * Pattern back = new BackReferencePattern(vowel);
+ * Pattern doubleVowel = new ConcatenatePattern(vowel, back);
+ * </pre>
+ *
+ * Here, doubleVowel matches (for example) "ee" and "ii" but not "ei".
+ *
+ */
 
-An instance of this {@link Pattern} matches the same string matched by some
-previously matched Pattern (specified by the <code>referent</code> argument of
-the BackReferencePattern Constructor).
-
-<p>
-Example:
-<p>
-<pre>
-    Pattern vowel=new ExplicitCharClass("aeiou");
-    Pattern back=new BackReferencePattern(vowel);
-    Pattern doubleVowel=new ConcatenatePattern(vowel,back);
-</pre>
-
-Here, doubleVowel matches (for example) "ee" and "ii" but not "ei".
-
-*/
-
-public class BackReferencePattern extends Pattern//@ implements MultiPatterner
+public class BackReferencePattern extends Pattern// @ implements MultiPatterner
 {
-  private Pattern referent;
+    private Pattern referent;
 
-/**
-  @param referent The Pattern to be matched as a back-reference
-*/
+    /**
+     * @param referent
+     *            The Pattern to be matched as a back-reference
+     */
 
-  public BackReferencePattern(Pattern referent) {setReferent(referent);}
+    public BackReferencePattern(Pattern referent) {
+        setReferent(referent);
+    }
 
-  /** @return this BackReferencePattern */
-  public BackReferencePattern setReferent(Pattern referent)
-  {this.referent=referent; altered();return this;}
+    /** @return this BackReferencePattern */
+    public BackReferencePattern setReferent(Pattern referent) {
+        this.referent = referent;
+        altered();
+        return this;
+    }
 
-  public Pattern getReferent() { return referent;}
+    public Pattern getReferent() {
+        return referent;
+    }
 
-  Rope getInnerRope()
-  {
-     return new CharSequenceRope("\\k<"+referent.getNam()+">");
-  }
+    @Override
+    Rope getInnerRope() {
+        return new CharSequenceRope("\\k<" + referent.getNam() + ">");
+    }
 
-  BackReferencePattern checkReferent(List<Pattern> kids)
-  {
-     if(this.equals(referent))
-        throw new BackReferenceException(this + ": self referring referent");
-     int referentIndex=kids.indexOf(referent);
-     if(referentIndex<0)
-        throw new BackReferenceException
-           (this +" has dangling reference to " + referent);
-     if( referentIndex> kids.indexOf(this))
-        throw  new BackReferenceException
-           (this + " has forward reference to " + referent);
-    return this;
-  }
+    BackReferencePattern checkReferent(List<Pattern> kids) {
+        if (this.equals(referent)) {
+            throw new BackReferenceException(this + ": self referring referent");
+        }
+        int referentIndex = kids.indexOf(referent);
+        if (referentIndex < 0) {
+            throw new BackReferenceException(this + " has dangling reference to " + referent);
+        }
+        if (referentIndex > kids.indexOf(this)) {
+            throw new BackReferenceException(this + " has forward reference to " + referent);
+        }
+        return this;
+    }
 
-/**
-  Thrown when a BackReferencePattern has an inappropriate <code>referent</code>.
-*/
-  public static class BackReferenceException extends RuntimeException
-  {
-     BackReferenceException(String message)
-     {
-        super(message);
-     }
-  }
+    /**
+     * Thrown when a BackReferencePattern has an inappropriate <code>referent</code>.
+     */
+    public static class BackReferenceException extends RuntimeException {
 
-  public BackReferencePattern copy()
-  {
-     BackReferencePattern ans=new BackReferencePattern(referent.copy());
-     super.copyTo(ans);
-     return ans;
-  }
+        private static final long serialVersionUID = 5505270812795568920L;
 
+        BackReferenceException(String message) {
+            super(message);
+        }
+    }
+
+    @Override
+    public BackReferencePattern copy() {
+        BackReferencePattern ans = new BackReferencePattern(referent.copy());
+        super.copyTo(ans);
+        return ans;
+    }
 
 }

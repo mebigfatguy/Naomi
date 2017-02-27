@@ -35,121 +35,114 @@ package org.naomi.regex;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-
 /**
+ *
+ * This Enum defines a set of constants, each of which specifies a pre-defined "Locale" set of characters to be matched (as described below). Each of these Enum
+ * constants can be used to instantiate a {@link BuiltInCharClass} that matches any of the characters in the corresponding pre-defined set. For example,
+ *
+ * <p>
+ *
+ * <pre>
+ * Pattern digits = new BuiltInCharClass(LocaleBuiltIn.minus);
+ * </pre>
+ *
+ * matches (on each repetition) the localized character for "minus".
+ *
+ * @see #setLocale
+ */
 
-     This Enum defines a set of constants, each of which specifies a
-     pre-defined "Locale" set of characters to be matched (as described
-     below).  Each of these Enum constants can be used to instantiate a
-     {@link BuiltInCharClass} that matches any of the characters in the
-     corresponding pre-defined set.  For example,
+public enum LocaleBuiltIn implements BuiltInInterface {
+    // (
 
-<p>
-<pre>
-	Pattern digits = new BuiltInCharClass(LocaleBuiltIn.minus);
-</pre>
-     matches (on each repetition) the localized character for "minus".
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    decimalSeparator {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getDecimalSeparator());
+        }
+    },
 
-@see #setLocale
-*/
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    groupingSeparator {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getGroupingSeparator());
+        }
+    },
 
-public enum LocaleBuiltIn implements BuiltInInterface
-{
-//(
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    minus {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getMinusSign());
+        }
+    },
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-decimalSeparator
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getDecimalSeparator());
-  }
-},
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    monetaryDecimalSeparator {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getMonetaryDecimalSeparator());
+        }
+    },
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-groupingSeparator
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getGroupingSeparator());
-  }
-},
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    percent {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getPercent());
+        }
+    },
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-minus
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getMinusSign());
-  }
-},
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    perMill {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getPerMill());
+        }
+    },
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-monetaryDecimalSeparator
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getMonetaryDecimalSeparator());
-  }
-},
+    // * This constant is Locale dependent; See {@link #setLocale}.*/
+    zero {
+        @Override
+        public CharSequence getPreRegularExpression() {
+            return esc(getSyms().getZeroDigit());
+        }
+    },
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-percent
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getPercent());
-  }
-},
+    // )
+    ;
+    private static DecimalFormatSymbols decimalFormatSymbols;
+    private static Locale locale = Locale.getDefault();
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-perMill
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getPerMill());
-  }
-},
+    /**
+     * Sets the Locale for Locale dependent constants. Defaults to the default Locale,
+     */
+    static public void setLocale(Locale localeArg) {
+        if (locale.equals(localeArg)) {
+            return;
+        }
+        locale = localeArg;
+        decimalFormatSymbols = null;
+    }
 
-//* This constant is Locale dependent; See {@link #setLocale}.*/
-zero
-{
-  public CharSequence getPreRegularExpression()
-  {
-     return esc(getSyms().getZeroDigit());
-  }
-},
+    private static DecimalFormatSymbols getSyms() {
+        if (decimalFormatSymbols == null) {
+            decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
+        }
+        return decimalFormatSymbols;
+    }
 
-//)
-;
-  private static  DecimalFormatSymbols decimalFormatSymbols;
-  private static Locale locale=Locale.getDefault();
+    private static String esc(char ch) {
+        if (Character.isAlphabetic(ch) || Character.isDigit(ch)) {
+            return Character.toString(ch);
+        } else {
+            return "\\" + ch;
+        }
+    }
 
-  /** Sets the Locale for Locale dependent constants.
-  Defaults to the default Locale,*/
-  static public void setLocale(Locale localeArg)
-  {
-     if(locale.equals(localeArg))
-        return;
-      locale=localeArg;
-      decimalFormatSymbols=null;
-  }
-
-  private static DecimalFormatSymbols getSyms()
-  {
-     if(decimalFormatSymbols==null)
-        decimalFormatSymbols=DecimalFormatSymbols.getInstance(locale);
-      return decimalFormatSymbols;
-  }
-
-  private static String esc(char ch)
-  {
-     if(Character.isAlphabetic(ch)||Character.isDigit(ch))
-        return Character.toString(ch);
-     else
-        return "\\"+ch;
-   }
-
-
-  public String toString() {return getClass().getSimpleName()+"."+name();}
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "." + name();
+    }
 }

@@ -35,51 +35,86 @@ setMacCount() methods of Pattern*/
 
 package org.naomi.regex;
 
-class Count
-{
-  int min;
-  int max; //Integer.MAX_VALUE menas no max
+class Count {
+    int min;
+    int max; // Integer.MAX_VALUE menas no max
 
-  Count() {this(1,1);}
-  Count(int min,Integer max) {setMin(min);setMax(max);}
+    Count() {
+        this(1, 1);
+    }
 
-  public String toString()
-  {
-     if(min==1 && max==1) return "";
-     if(min==0 && max==1) return "?";
-     if(min==0 && max==Integer.MAX_VALUE) return "*";
-     if(min==1 && max==Integer.MAX_VALUE) return "+";
-     if(min==max) return "{"+min+"}";
-     if(max==Integer.MAX_VALUE) return "{"+min+",}";
-     return "{"+min+","+max+"}";
-  }
+    Count(int min, Integer max) {
+        setMin(min);
+        setMax(max);
+    }
 
-  public boolean isDefault() {return min==1 && max==1;}
-  public int getMin() {return min;}
-  public Integer getMax() {return max==Integer.MAX_VALUE? null:max;}
-  public Count setMin(int min) {this.min=min; return this;}
+    @Override
+    public String toString() {
+        if ((min == 1) && (max == 1)) {
+            return "";
+        }
+        if ((min == 0) && (max == 1)) {
+            return "?";
+        }
+        if ((min == 0) && (max == Integer.MAX_VALUE)) {
+            return "*";
+        }
+        if ((min == 1) && (max == Integer.MAX_VALUE)) {
+            return "+";
+        }
+        if (min == max) {
+            return "{" + min + "}";
+        }
+        if (max == Integer.MAX_VALUE) {
+            return "{" + min + ",}";
+        }
+        return "{" + min + "," + max + "}";
+    }
 
-  public Count setMax(Integer max)
-  {
-     this.max=max==null || max<=0 ? Integer.MAX_VALUE:max;
-     return this;
-  }
+    public boolean isDefault() {
+        return (min == 1) && (max == 1);
+    }
 
-  StringBuilder toString(StringBuilder sb,Verbose verbose)
-  {
-     if(sb==null) sb=new StringBuilder();
-     if(verbose==Verbose.no) return sb;
-     if(min != 1 || verbose==Verbose.very)
-        sb.append("min_count=" +min);
-     if(max != 1 ||  verbose==Verbose.very)
-     {
-        String string;
-        if(max==Integer.MAX_VALUE) string="Unbounded";
-        else string=Integer.toString(max);
-        if(sb.length() > 0)
-           sb.append(" ");
-        sb.append("max_count="+string);
-     }
-     return sb;
-  }
+    public int getMin() {
+        return min;
+    }
+
+    public Integer getMax() {
+        return max == Integer.MAX_VALUE ? null : max;
+    }
+
+    public Count setMin(int min) {
+        this.min = min;
+        return this;
+    }
+
+    public Count setMax(Integer max) {
+        this.max = (max == null) || (max <= 0) ? Integer.MAX_VALUE : max;
+        return this;
+    }
+
+    StringBuilder toString(StringBuilder sb, Verbose verbose) {
+        if (sb == null) {
+            sb = new StringBuilder();
+        }
+        if (verbose == Verbose.no) {
+            return sb;
+        }
+        if ((min != 1) || (verbose == Verbose.very)) {
+            sb.append("min_count=" + min);
+        }
+        if ((max != 1) || (verbose == Verbose.very)) {
+            String string;
+            if (max == Integer.MAX_VALUE) {
+                string = "Unbounded";
+            } else {
+                string = Integer.toString(max);
+            }
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append("max_count=" + string);
+        }
+        return sb;
+    }
 }

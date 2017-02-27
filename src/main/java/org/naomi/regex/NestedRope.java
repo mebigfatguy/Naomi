@@ -32,59 +32,48 @@
  */
 package org.naomi.regex;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-class NestedRope //does not extend Rope
+class NestedRope // does not extend Rope
 {
-  // order is outer to inner
-  final private List<Rope> ropes;
-  final private boolean outerFirst;
+    // order is outer to inner
+    final private List<Rope> ropes;
+    final private boolean outerFirst;
 
-  NestedRope(boolean outerFirst,List<Rope> ropes)
-  {
-     this.ropes=ropes;
-     this.outerFirst=outerFirst;
-  }
+    NestedRope(boolean outerFirst, List<Rope> ropes) {
+        this.ropes = ropes;
+        this.outerFirst = outerFirst;
+    }
 
-  NestedRope(boolean outerFirst,Rope ... rope)
-  {
-     this(outerFirst,Arrays.asList(rope));
-  }
+    NestedRope(boolean outerFirst, Rope... rope) {
+        this(outerFirst, Arrays.asList(rope));
+    }
 
-  Rope getRope()
-  {
-     if(ropes.size() ==0 ) throw new Bug();
-     Rope ans;
-     if(outerFirst)
-        ans=ropes.get(0);
-     else
-        ans=ropes.get(ropes.size()-1);
-     if(ropes.size() >= 2)
-     {
-        List<Rope> subList;
-        if(outerFirst)
-           subList=ropes.subList(1,ropes.size());
-        else
-           subList=ropes.subList(0,ropes.size()-1);
-        NestedRope nested=new NestedRope(outerFirst,subList);
-        if(ans.kids != null)
-           throw new Bug();
-        ans.kids= Collections.singletonList(nested.getRope());
-     }
-     return ans;
-  }
+    Rope getRope() {
+        if (ropes.size() == 0) {
+            throw new Bug();
+        }
+        Rope ans;
+        if (outerFirst) {
+            ans = ropes.get(0);
+        } else {
+            ans = ropes.get(ropes.size() - 1);
+        }
+        if (ropes.size() >= 2) {
+            List<Rope> subList;
+            if (outerFirst) {
+                subList = ropes.subList(1, ropes.size());
+            } else {
+                subList = ropes.subList(0, ropes.size() - 1);
+            }
+            NestedRope nested = new NestedRope(outerFirst, subList);
+            if (ans.kids != null) {
+                throw new Bug();
+            }
+            ans.kids = Collections.singletonList(nested.getRope());
+        }
+        return ans;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

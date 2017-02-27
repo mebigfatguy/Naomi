@@ -33,44 +33,44 @@
 package org.naomi.regex;
 
 /**
-
-  Each constant defined by this Enum specifies a boundary (word, line, etc.)
-  that is to be matched by an instance of {@link BoundaryPattern} instantiated
-  with this value.
-
+ *
+ * Each constant defined by this Enum specifies a boundary (word, line, etc.) that is to be matched by an instance of {@link BoundaryPattern} instantiated with
+ * this value.
+ *
  */
 
-public enum Boundary
-{
-  line("^","$"),
-  word("\\b","\\b"),
-  nonWord("\\B","\\B"),
+public enum Boundary {
+    line("^", "$"), word("\\b", "\\b"), nonWord("\\B", "\\B"),
 
-  /** All of input */
-  all("\\A","\\z"),
+    /** All of input */
+    all("\\A", "\\z"),
 
-  /** All of input except for line terminator, if any*/
-  allButForTerminator(null,"\\Z"),
-  ;
+    /** All of input except for line terminator, if any */
+    allButForTerminator(null, "\\Z"),;
 
-  private String left, right;
+    private String left, right;
 
-  private Boundary(String left, String right)
-  {
-     this.left=left;
-     this.right=right;
-  }
+    private Boundary(String left, String right) {
+        this.left = left;
+        this.right = right;
+    }
 
-  public String getLeft()
-  {
-     if(left==null) throw new IllegalArgumentException();
-      return left;
-  }
+    public String getLeft() {
+        if (left == null) {
+            throw new IllegalArgumentException();
+        }
+        return left;
+    }
 
-  public String getRight()
-  {
-     if(right==null) throw new IllegalArgumentException();
-     return right;
-  }
-  public String toString() {return getClass().getSimpleName()+"."+name();}
+    public String getRight() {
+        if (right == null) {
+            throw new IllegalArgumentException();
+        }
+        return right;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "." + name();
+    }
 }

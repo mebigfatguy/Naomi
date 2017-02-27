@@ -32,78 +32,88 @@
  */
 package org.naomi.regex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-abstract class Patterns extends Pattern
-{
-  private List<Pattern> patterns=new ArrayList<Pattern>();
-  abstract String getDelimiter();
+abstract class Patterns extends Pattern {
+    private List<Pattern> patterns = new ArrayList<>();
 
-  Patterns(Object... obs) {add(obs);}
+    abstract String getDelimiter();
 
-  /** For each object, if object is a pattern add it, otherwise
- add a new CharSequencePattern(object.toString())*/
-  public Patterns add(Collection<?> objects)
-  {
-     for(Object ob:objects)
-        addOne(ob);
-      return this;
-  }
+    Patterns(Object... obs) {
+        add(obs);
+    }
 
-  /** For each object, if object is a pattern add it, Otherwise
- add a new CharSequencePattern(object.toString())*/
-  public Patterns add(Object ... object)
-  {
-     for(Object ob: object)
-        addOne(ob);
-     return this;
-  }
+    /**
+     * For each object, if object is a pattern add it, otherwise add a new CharSequencePattern(object.toString())
+     */
+    public Patterns add(Collection<?> objects) {
+        for (Object ob : objects) {
+            addOne(ob);
+        }
+        return this;
+    }
 
-  private Patterns addOne(Object ob)
-  {
-     Pattern pattern;
-     if(ob instanceof Pattern)
-        pattern=(Pattern)ob;
-     else
-        pattern=new CharSequencePattern(ob.toString());
-     patterns.add(pattern);
-     altered();
-     return this;
-  }
+    /**
+     * For each object, if object is a pattern add it, Otherwise add a new CharSequencePattern(object.toString())
+     */
+    public Patterns add(Object... object) {
+        for (Object ob : object) {
+            addOne(ob);
+        }
+        return this;
+    }
 
-  public Patterns clear()
-  {
-     for(Pattern pattern:patterns)
-        pattern.removeAlterationListener(this);
-      patterns.clear();
-     altered();
-     return this;
-   }
+    private Patterns addOne(Object ob) {
+        Pattern pattern;
+        if (ob instanceof Pattern) {
+            pattern = (Pattern) ob;
+        } else {
+            pattern = new CharSequencePattern(ob.toString());
+        }
+        patterns.add(pattern);
+        altered();
+        return this;
+    }
 
-  Rope getInnerRope()
-  {
-    List<RopeClient> list=new ArrayList<RopeClient>();
-    for(Pattern pattern:patterns)
-     list.add(pattern);
-    return new Ropes(list,getDelimiter());
-  }
+    public Patterns clear() {
+        for (Pattern pattern : patterns) {
+            pattern.removeAlterationListener(this);
+        }
+        patterns.clear();
+        altered();
+        return this;
+    }
 
-  List<Pattern> computeKids()
-  {
-     List<Pattern> ans=new ArrayList<Pattern>();
-     ans.add(this);
-     for(Pattern pattern:patterns)
-        ans.addAll(pattern.getKids());
-     return ans;
-  }
+    @Override
+    Rope getInnerRope() {
+        List<RopeClient> list = new ArrayList<>();
+        for (Pattern pattern : patterns) {
+            list.add(pattern);
+        }
+        return new Ropes(list, getDelimiter());
+    }
 
-  List<Pattern> getPatterns() {return patterns;}
+    @Override
+    List<Pattern> computeKids() {
+        List<Pattern> ans = new ArrayList<>();
+        ans.add(this);
+        for (Pattern pattern : patterns) {
+            ans.addAll(pattern.getKids());
+        }
+        return ans;
+    }
 
-  public Patterns copyTo(Pattern other)
-  {
-     ((Patterns)other).patterns=new ArrayList<Pattern>(patterns);
-     super.copyTo(other);
-     return this;
-  }
+    List<Pattern> getPatterns() {
+        return patterns;
+    }
+
+    @Override
+    public Patterns copyTo(Pattern other) {
+        ((Patterns) other).patterns = new ArrayList<>(patterns);
+        super.copyTo(other);
+        return this;
+    }
 
 }

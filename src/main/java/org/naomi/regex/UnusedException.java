@@ -33,18 +33,20 @@
 package org.naomi.regex;
 
 /**
+ *
+ * Thrown to indicate that information about some {@link Pattern} was solicited in the context of a Pattern that did not use that Pattern.
+ *
+ */
 
-Thrown to indicate that information about some {@link Pattern} was solicited
-in the context of a Pattern that did not use that Pattern.
+public class UnusedException extends RuntimeException {
 
-*/
+    private static final long serialVersionUID = 4705742262412926623L;
 
-public class UnusedException extends RuntimeException
-{
-  UnusedException(String message) {super(message);}
+    UnusedException(String message) {
+        super(message);
+    }
 
-  UnusedException(Pattern main, Pattern sub)
-  {
-     this(sub + " unused by "+main);
-  }
+    UnusedException(Pattern main, Pattern sub) {
+        this(sub + " unused by " + main);
+    }
 }

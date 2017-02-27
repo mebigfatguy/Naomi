@@ -32,38 +32,43 @@
  */
 package org.naomi.regex;
 
-abstract class ComplementableCharClass extends CharClass
-{
-  private boolean not=false;
+abstract class ComplementableCharClass extends CharClass {
+    private boolean not = false;
 
-  /** Determines whether the sense of membership will be reversed.
-  Defaults to false.*/
-  public ComplementableCharClass setNot(boolean not)
-  {
-     if(this.not==not) return this;
-     this.not=not;
-     altered();
-     return this;
-  }
+    /**
+     * Determines whether the sense of membership will be reversed. Defaults to false.
+     */
+    public ComplementableCharClass setNot(boolean not) {
+        if (this.not == not) {
+            return this;
+        }
+        this.not = not;
+        altered();
+        return this;
+    }
 
-  /** See {@link #setNot} */
-  public boolean isNot() {return not;}
+    /** See {@link #setNot} */
+    public boolean isNot() {
+        return not;
+    }
 
+    /** See {@link #setNot} */
+    public ComplementableCharClass reverseNot() {
+        setNot(!isNot());
+        return this;
+    }
 
-  /** See {@link #setNot} */
-  public ComplementableCharClass reverseNot() {setNot(!isNot());return this;}
+    @Override
+    public ComplementableCharClass getComplement() {
+        ComplementableCharClass copy = (ComplementableCharClass) copy();
+        copy.reverseNot();
+        return copy;
+    }
 
-  public ComplementableCharClass getComplement()
-  {
-     ComplementableCharClass copy=(ComplementableCharClass)copy();
-     copy.reverseNot();
-     return copy;
-  }
-
-  public ComplementableCharClass copyTo(Pattern other)
-  {
-     ((ComplementableCharClass)other).setNot(isNot());
-     return (ComplementableCharClass)super.copyTo(other);
-  }
+    @Override
+    public ComplementableCharClass copyTo(Pattern other) {
+        ((ComplementableCharClass) other).setNot(isNot());
+        return (ComplementableCharClass) super.copyTo(other);
+    }
 
 }

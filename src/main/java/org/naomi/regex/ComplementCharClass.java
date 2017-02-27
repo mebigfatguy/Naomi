@@ -32,26 +32,23 @@
  */
 package org.naomi.regex;
 
-public class ComplementCharClass extends DelegateCharClass
-{
-  CharClass other;
+public class ComplementCharClass extends DelegateCharClass {
+    CharClass other;
 
-  public ComplementCharClass(CharClass other)
-  {
-     setOther(other);
-  }
+    public ComplementCharClass(CharClass other) {
+        setOther(other);
+    }
 
-  public CharClass getOther()
-  {
-     return other;
-  }
+    public CharClass getOther() {
+        return other;
+    }
 
-  public ComplementCharClass setOther(CharClass other)
-  {
-     if(this.other==other)
+    public ComplementCharClass setOther(CharClass other) {
+        if (this.other == other) {
+            return this;
+        }
+        this.other = other;
+        setDelegate(other.getComplement());
         return this;
-     this.other=other;
-     setDelegate(other.getComplement());
-     return this;
-  }
+    }
 }

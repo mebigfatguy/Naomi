@@ -32,64 +32,63 @@
  */
 package org.naomi.regex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DelegateCharClass extends CharClass implements AlterationListener
-{
-  private CharClass delegate;
+public class DelegateCharClass extends CharClass implements AlterationListener {
+    private CharClass delegate;
 
-  public DelegateCharClass()
-  {
-  }
+    public DelegateCharClass() {
+    }
 
-  public DelegateCharClass(CharClass delegate)
-  {
-     setDelegate(delegate);
-  }
+    public DelegateCharClass(CharClass delegate) {
+        setDelegate(delegate);
+    }
 
-  public DelegateCharClass setDelegate(CharClass delegate)
-  {
-     if(this.delegate==delegate)
+    public DelegateCharClass setDelegate(CharClass delegate) {
+        if (this.delegate == delegate) {
+            return this;
+        }
+        if (delegate != null) {
+            delegate.removeAlterationListener(this);
+        }
+        this.delegate = delegate;
+        delegate.addAlterationListener(this);
+        altered();
         return this;
-     if(delegate != null)
-        delegate.removeAlterationListener(this);
-     this.delegate=delegate;
-     delegate.addAlterationListener(this);
-     altered();
-     return this;
-  }
+    }
 
-  //@Rope getInnerRope() {return delegate.getInnerRope();}
+    // @Rope getInnerRope() {return delegate.getInnerRope();}
 
-  public CharClass copy()
-  {
-     CharClass ans=new DelegateCharClass((CharClass)delegate.copy());
-     copyTo(ans);
-     return ans;
-  }
+    @Override
+    public CharClass copy() {
+        CharClass ans = new DelegateCharClass((CharClass) delegate.copy());
+        copyTo(ans);
+        return ans;
+    }
 
-  public List<Pattern> computeKids()
-  {
-    List<Pattern> ans=new ArrayList<Pattern>();
-    for(Pattern kid:delegate.getKids())
-    {
-        if(kid==delegate)
-           ans.add(this);
-        else
-           ans.add(kid);
-     }
-     return ans;
-  }
+    @Override
+    public List<Pattern> computeKids() {
+        List<Pattern> ans = new ArrayList<>();
+        for (Pattern kid : delegate.getKids()) {
+            if (kid == delegate) {
+                ans.add(this);
+            } else {
+                ans.add(kid);
+            }
+        }
+        return ans;
+    }
 
-  public CharClass getComplement()
-  {
-     return new DelegateCharClass(delegate.getComplement());
-  }
+    @Override
+    public CharClass getComplement() {
+        return new DelegateCharClass(delegate.getComplement());
+    }
 
-  CharClass fetchInnerString(StringBuilder stringBuilder)
-  {
-    delegate.fetchInnerString(stringBuilder);
-    return this;
-  }
+    @Override
+    CharClass fetchInnerString(StringBuilder stringBuilder) {
+        delegate.fetchInnerString(stringBuilder);
+        return this;
+    }
 
 }

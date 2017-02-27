@@ -33,13 +33,26 @@
 package org.naomi.regex;
 
 /**
-Thrown to indicate that an internal bug within Naomi has been encountered.
-*/
+ * Thrown to indicate that an internal bug within Naomi has been encountered.
+ */
 
-public class Bug extends RuntimeException
-{
-  public Bug(String message,Throwable th){super("Bug: "+message,th);}
-  public Bug(String message) {super("Bug: "+message);}
-  public Bug(Throwable th){super("Bug",th);}
-  public Bug(){super("Bug");}
+public class Bug extends RuntimeException {
+
+    private static final long serialVersionUID = -5885129002835345025L;
+
+    public Bug(String message, Throwable th) {
+        super("Bug: " + message, th);
+    }
+
+    public Bug(String message) {
+        super("Bug: " + message);
+    }
+
+    public Bug(Throwable th) {
+        super("Bug", th);
+    }
+
+    public Bug() {
+        super("Bug");
+    }
 }

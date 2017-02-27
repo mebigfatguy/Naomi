@@ -32,44 +32,31 @@
  */
 package org.naomi.regex;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.List;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.nio.file.*;
+class CharSequenceRope extends Rope {
+    final CharSequence charSequence;
 
-class CharSequenceRope extends Rope
-{
- final CharSequence charSequence;
+    CharSequenceRope(CharSequence charSequence) {
+        super(null, null, null, false);
+        this.charSequence = charSequence;
+    }
 
-  CharSequenceRope(CharSequence charSequence)
-  {
-     super(null,null,null,false);
-     this.charSequence=charSequence;
-  }
+    @Override
+    CharSequenceRope core(StringBuilder ans, Pretty pretty, String indent) {
+        if (charSequence == null) {
+            return this;
+        }
+        if (!pretty.pretty) {
+            ans.append(charSequence);
+        } else {
+            ans.append(indent + charSequence);
+            Utilities.assureEndsWithNewLine(ans);
+        }
+        return this;
+    }
 
-  CharSequenceRope core(StringBuilder ans,Pretty pretty,String indent)
-  {
-     if(charSequence==null) return  this;
-     if(!pretty.pretty)
-        ans.append(charSequence);
-     else
-     {
-        ans.append(indent+charSequence);
-        Utilities.assureEndsWithNewLine(ans);
-     }
-     return this;
-   }
+    @Override
+    String getKidIndentIncrement(Rope kid, Pretty pretty) {
 
-   String getKidIndentIncrement(Rope kid, Pretty pretty)
-   {
-
-     throw new UnsupportedOperationException();
-   }
+        throw new UnsupportedOperationException();
+    }
 }

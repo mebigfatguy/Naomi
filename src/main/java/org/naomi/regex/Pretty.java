@@ -32,95 +32,74 @@
  */
 package org.naomi.regex;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.List;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.nio.file.*;
+/**
+ * This class governs the display of regular expressions (see {@link Pattern#getRegularExpression getRegularExpression} and {@link Pattern#setPretty
+ * setPretty}), to generate expressions which are more human readable&mdash;or, more precisely, less unreadable.
+ */
+public class Pretty {
+    private static Pattern whitePattern;
 
-/** This class governs the display of regular expressions
-(see {@link Pattern#getRegularExpression getRegularExpression} and
-{@link Pattern#setPretty setPretty}), to generate expressions which are more
-human readable&mdash;or, more precisely, less unreadable.
-*/
-public class Pretty
-{
-  private static Pattern whitePattern;
+    /**
+     * generates a new Pretty with {@link #pretty} == true, {@link #indenter} == 6 spaces and {@link #comments} == true.
+     */
+    public Pretty() {
+        pretty = true;
+        indenter = Utilities.ditto(6, " ", null);
+        comments = true;
+    }
 
-  /** generates a new Pretty with
-  {@link #pretty} == true,
-   {@link #indenter} == 6 spaces
-   and {@link #comments} == true.
-  */
-  public Pretty()
-  {
-     pretty=true;
-     indenter =Utilities.ditto(6," ",null);
-     comments=true;
-  }
+    /**
+     * generates a new Pretty with {@link #pretty} == prettyArg, {@link #indenter} == 6 spaces and {@link #comments} == true.
+     */
+    public Pretty(boolean prettyArg) {
+        this();
+        pretty = prettyArg;
+    }
 
- /** generates a new Pretty with
-  {@link #pretty} == prettyArg,
-   {@link #indenter} == 6 spaces
-   and {@link #comments} == true.
-  */
-  public Pretty(boolean prettyArg)
-  {
-     this();
-     pretty=prettyArg;
-  }
+    public Pretty(Pretty other) {
+        other.pretty = pretty;
+        other.indenter = indenter;
+        other.comments = comments;
+    }
 
-  public Pretty(Pretty other)
-  {
-     other.pretty=pretty;
-     other.indenter=indenter;
-     other.comments=comments;
-  }
+    /**
+     * When true, {@link Pattern#getRegularExpression getRegularExpression} attempts to generate a more human readable expression; when false, all other fields
+     * are ignored and {@link Pattern#getRegularExpression getRegularExpression} generates a dense expression. The default is false.
+     */
+    public boolean pretty;
 
-  /** When true, {@link Pattern#getRegularExpression getRegularExpression}
-  attempts to generate a more human readable expression; when false, all
-  other fields are ignored and
-  {@link Pattern#getRegularExpression getRegularExpression} generates
-  a dense expression. The default is false.
-  */
-  public boolean pretty;
+    /** The indentation per level. The default is 6 spaces. */
+    public CharSequence indenter;
 
-  /** The indentation per level. The default is 6 spaces.*/
-  public CharSequence indenter;
+    /**
+     * When true, terse comments are generated; when false no comments are generated. The default is true.
+     */
+    public boolean comments;
 
-  /** When true, terse comments are generated; when false no comments are
-  generated. The default is true.
-  */
-  public boolean comments;
+    private static Pattern getWhitePattern() {
+        if (whitePattern == null) {
+            whitePattern = new BuiltInCharClass(CoreBuiltIn.white).setMinAndMaxCount(0, null);
+        }
+        return whitePattern;
+    }
 
-  private static Pattern getWhitePattern()
-  {
-     if(whitePattern==null)
-        whitePattern=new BuiltInCharClass(CoreBuiltIn.white).setMinAndMaxCount(0,null);
-      return whitePattern;
- }
+    Pretty check() {
+        if (!pretty) {
+            return this;
+        }
+        if (!getWhitePattern().matches(indenter)) {
+            throw new BadPrettyException(" indenter=='" + indenter + "' is not all white");
+        }
+        return this;
+    }
 
-  Pretty check()
-  {
-     if(!pretty) return this;
-     if(!getWhitePattern().matches(indenter))
-        throw new BadPrettyException
-           (" indenter=='"+indenter+"' is not all white");
-     return this;
-   }
+    /** Thrown when an instance of Pretty has a bad field */
+    public static class BadPrettyException extends RuntimeException {
 
-  /** Thrown when an instance of Pretty has a bad field*/
-  public static class BadPrettyException extends RuntimeException
-  {
-     BadPrettyException(String msg)
-     {
-        super("Bad Pretty: "+ msg);
-     }
-  }
+        private static final long serialVersionUID = 1704302991230451788L;
+
+        BadPrettyException(String msg) {
+            super("Bad Pretty: " + msg);
+        }
+    }
 }

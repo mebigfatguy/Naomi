@@ -33,66 +33,64 @@
 package org.naomi.regex;
 
 /**
+ *
+ * An instance of ExplicitCharClass is a {@link Pattern} which, on each repetition, matches any single character in the {@link String} or other
+ * {@link CharSequence} used to the instantiate the ExplicitCharClass. If the resulting set (which is <i>not</i> a {@link java.util.Set java.util.Set}) contains
+ * more than a few thousand characters, performance may be adversely impacted. The internal "Not" flag in each instance can be set to make the class instead
+ * match all characters <i>except</i> those in the pre-defined set denoted by its instantiating {@link CharSequence}; this has the effect of matching the
+ * complement of the specified set of characters.
+ *
+ * <p>
+ * Only one individual character of the resulting set will be matched by each repetition of the ExplicitCharClass pattern. The order of the characters in the
+ * set and any duplicates in it are ignored, so, for example:
+ *
+ * <p>
+ *
+ * <pre>
+ * pat1 = new ExplicitCharClass("abc");
+ * pat1.setMinAndMaxCount(1, 3);
+ *
+ * pat2 = new ExplicitCharClass("bcab");
+ * pat2.setMinAndMaxCount(1, 3);
+ * </pre>
+ *
+ * both match "a", "b", "aa", "aaa", "ba", "cab", etc.
+ * <p>
+ * To match an entire sequence of characters in order, use a {@link CharSequencePattern} instead.
+ *
+ */
 
-     An instance of ExplicitCharClass is a {@link Pattern} which, on each
-     repetition, matches any single character in the {@link String} or other
-     {@link CharSequence} used to the instantiate the ExplicitCharClass. If the
-     resulting set (which is <i>not</i> a {@link java.util.Set java.util.Set})
-     contains more than a few thousand characters, performance may be adversely
-     impacted. The internal "Not" flag in each instance can be set to make the
-     class instead match all characters <i>except</i> those in the pre-defined
-     set denoted by its instantiating {@link CharSequence}; this has the effect
-     of matching the complement of the specified set of characters.
+public class ExplicitCharClass extends ComplementableCharClass {
+    private CharSequence charSequence;
 
-<p> Only one individual character of the resulting set will be matched by each
-repetition of the ExplicitCharClass pattern. The order of the characters in the
-set and any duplicates in it are ignored, so, for example:
+    public ExplicitCharClass(CharSequence charSequence) {
+        setCharSequence(charSequence);
+    }
 
-<p>
-<pre>
-	pat1 = new ExplicitCharClass("abc");
-	pat1.setMinAndMaxCount(1,3);
+    public ExplicitCharClass setCharSequence(CharSequence charSequence) {
+        this.charSequence = charSequence;
+        altered();
+        return this;
+    }
 
-	pat2 = new ExplicitCharClass("bcab");
-	pat2.setMinAndMaxCount(1,3);
-</pre>
-	both match "a", "b", "aa", "aaa", "ba", "cab", etc.
-<p>
-     To match an entire sequence of characters in order, use a
-     {@link CharSequencePattern} instead.
+    public CharSequence getCharSequence() {
+        return charSequence;
+    }
 
-*/
+    @Override
+    ExplicitCharClass fetchInnerString(StringBuilder ans) {
+        if (isNot()) {
+            ans.append("^");
+        }
+        ans.append(quote(charSequence));
+        return this;
+    }
 
-public class ExplicitCharClass extends ComplementableCharClass
-{
-  private CharSequence charSequence;
-
-  public ExplicitCharClass(CharSequence charSequence)
-  {
-     setCharSequence(charSequence);
-  }
-
-  public ExplicitCharClass setCharSequence(CharSequence charSequence)
-  {
-     this.charSequence=charSequence;
-     altered();
-     return this;
-  }
-
-  public CharSequence getCharSequence() {return charSequence;}
-
-  ExplicitCharClass fetchInnerString(StringBuilder ans)
-  {
-     if(isNot())ans.append("^");
-     ans.append(quote(charSequence));
-     return this;
-  }
-
- public ExplicitCharClass copy()
- {
-    ExplicitCharClass ans= new ExplicitCharClass(getCharSequence());
-    copyTo(ans);
-    return ans;
- }
+    @Override
+    public ExplicitCharClass copy() {
+        ExplicitCharClass ans = new ExplicitCharClass(getCharSequence());
+        copyTo(ans);
+        return ans;
+    }
 
 }

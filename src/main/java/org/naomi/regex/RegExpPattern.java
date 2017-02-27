@@ -33,58 +33,59 @@
 package org.naomi.regex;
 
 /**
-
-  A RegExpPattern  matches the strings matched by a given regular
-  expression. Its use constitutes a resort to the equivalent of assembly
-  language. It exists to support legacy applications.
-
-<blockquote>
-
-<b>Note: The regular expression should not use any named capturing groups
-whose names consist of an 'a' followed by digits.</b>
-
-</blockquote>
-
-Bug: If the regular expression contains any capturing groups, then {@link
-Matcher#start(Pattern)} and {@link Matcher#end(Pattern)} may not work properly.
-This bug will be removed when this package is compiled for java 1.8 or later.
-*/
-
-public class RegExpPattern extends Pattern
-{
-  private String regExp;
-
-  public RegExpPattern() {this(null);}
-
-  /** @param regExp A  regular expression as described in java.util.regex.Pattern
+ *
+ * A RegExpPattern matches the strings matched by a given regular expression. Its use constitutes a resort to the equivalent of assembly language. It exists to
+ * support legacy applications.
+ *
+ * <blockquote>
+ *
+ * <b>Note: The regular expression should not use any named capturing groups whose names consist of an 'a' followed by digits.</b>
+ *
+ * </blockquote>
+ *
+ * Bug: If the regular expression contains any capturing groups, then {@link Matcher#start(Pattern)} and {@link Matcher#end(Pattern)} may not work properly.
+ * This bug will be removed when this package is compiled for java 1.8 or later.
  */
-  public RegExpPattern(String regExp)
-  {
-     this.regExp=regExp;
-  }
 
-  /**
-  @param regExp A  regular expression as described in java.util.regex.Pattern
-  @return this RegExpPattern
-  */
-  public RegExpPattern setRegularExpression(String regExp )
-  {
-     this.regExp=regExp;
-     altered();
-     return this;
-  }
+public class RegExpPattern extends Pattern {
+    private String regExp;
 
-  public String getRegExp() {return regExp;}
+    public RegExpPattern() {
+        this(null);
+    }
 
-  Rope getInnerRope()
-  {
-     return new CharSequenceRope(regExp);
-  }
+    /**
+     * @param regExp
+     *            A regular expression as described in java.util.regex.Pattern
+     */
+    public RegExpPattern(String regExp) {
+        this.regExp = regExp;
+    }
 
-  public RegExpPattern copy()
-  {
-     RegExpPattern ans=new RegExpPattern(getRegExp());
-     copyTo(ans);
-     return ans;
-  }
+    /**
+     * @param regExp
+     *            A regular expression as described in java.util.regex.Pattern
+     * @return this RegExpPattern
+     */
+    public RegExpPattern setRegularExpression(String regExp) {
+        this.regExp = regExp;
+        altered();
+        return this;
+    }
+
+    public String getRegExp() {
+        return regExp;
+    }
+
+    @Override
+    Rope getInnerRope() {
+        return new CharSequenceRope(regExp);
+    }
+
+    @Override
+    public RegExpPattern copy() {
+        RegExpPattern ans = new RegExpPattern(getRegExp());
+        copyTo(ans);
+        return ans;
+    }
 }

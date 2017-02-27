@@ -33,24 +33,18 @@
 package org.naomi.regex;
 
 /**
+ *
+ * The listener interface for receiving notifications of changes in an instance of {@link Pattern} that might affect which Strings it matches.
+ *
+ */
 
-The listener interface for receiving notifications of changes in an
-instance of {@link Pattern} that might affect which Strings it matches.
-
-*/
-
-public interface AlterationListener
-{
-/**
-   This should be called when any change is made or occurs which might affect
-   which strings this Pattern matches.  It is called automatically whenever
-   any method or subclass method whose name begins with "set", is called.
-   When it is called, any data that have been cached for efficiency will be
-   removed.
-
-  @param src
-     The instance of {@link Pattern} whose alteration might have affected
-     which strings it matches.
-  */
-  AlterationListener altered(Pattern src);
+public interface AlterationListener {
+    /**
+     * This should be called when any change is made or occurs which might affect which strings this Pattern matches. It is called automatically whenever any
+     * method or subclass method whose name begins with "set", is called. When it is called, any data that have been cached for efficiency will be removed.
+     *
+     * @param src
+     *            The instance of {@link Pattern} whose alteration might have affected which strings it matches.
+     */
+    AlterationListener altered(Pattern src);
 }

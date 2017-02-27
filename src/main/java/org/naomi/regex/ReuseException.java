@@ -33,51 +33,56 @@
 package org.naomi.regex;
 
 /**
+ *
+ * Thrown to indicate that an attempt has been made by one {@link Pattern} to use another Pattern more than once.
+ *
+ * <p>
+ * For example (attempting to match "hellohello"):
+ *
+ * <pre>
+ * Pattern hello = new CharSequencePattern("hello");
+ * Pattern helloTwice = new ConcatenatePattern(hello, hello); // invalid
+ * Matcher matcher = helloTwice("farewell");
+ * matcher.find(); // Throws ReuseException
+ * </pre>
+ *
+ * One way to do this would be:
+ * <p>
+ *
+ * <pre>
+ * Pattern hello = new CharSequencePattern("hello");
+ * Pattern hello2 = new CharSequencePattern("hello");
+ * Pattern helloTwice = new ConcatenatePattern(hello, hello2);
+ * Matcher matcher = helloTwice("farewell");
+ * </pre>
+ *
+ * though of course, it could also be done with:
+ * <p>
+ *
+ * <pre>
+ * Pattern helloTwice = new CharSequencePattern("hello");
+ * helloTwice.setMinAndMaxCount(2, 2);
+ * Matcher matcher = helloTwice("farewell");
+ * </pre>
+ *
+ * Or even:
+ * <p>
+ *
+ * <pre>
+ * Pattern helloTwice = new CharSequencePattern("hellohello");
+ * Matcher matcher = helloTwice("farewell");
+ * </pre>
+ *
+ */
+public class ReuseException extends RuntimeException {
 
-  Thrown to indicate that an attempt has been made by one {@link Pattern} to
-  use another Pattern more than once.
+    private static final long serialVersionUID = -8418425440210580999L;
 
-<p>
-For example (attempting to match "hellohello"):
+    ReuseException(String message) {
+        super(message);
+    }
 
-<pre>
-    Pattern hello = new CharSequencePattern("hello");
-    Pattern helloTwice = new ConcatenatePattern(hello,hello); // invalid
-    Matcher matcher = helloTwice("farewell");
-    matcher.find();			      // Throws ReuseException
-</pre>
-
-One way to do this would be:
-<p>
-<pre>
-    Pattern hello = new CharSequencePattern("hello");
-    Pattern hello2 = new CharSequencePattern("hello");
-    Pattern helloTwice = new ConcatenatePattern(hello,hello2);
-    Matcher matcher = helloTwice("farewell");
-</pre>
-
-though of course, it could also be done with:
-<p>
-<pre>
-    Pattern helloTwice = new CharSequencePattern("hello");
-    helloTwice.setMinAndMaxCount(2,2);
-    Matcher matcher = helloTwice("farewell");
-</pre>
-
-Or even:
-<p>
-<pre>
-    Pattern helloTwice = new CharSequencePattern("hellohello");
-    Matcher matcher = helloTwice("farewell");
-</pre>
-
-*/
-public class ReuseException extends RuntimeException
-{
-  ReuseException(String message) {super(message);}
-
-  ReuseException(Pattern pattern)
-  {
-     this("Reuse of " +pattern.getClass());
-  }
+    ReuseException(Pattern pattern) {
+        this("Reuse of " + pattern.getClass());
+    }
 }

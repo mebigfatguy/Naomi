@@ -32,19 +32,9 @@
  */
 package org.naomi.regex;
 
-import java.util.Collections;
-
-class PatternRope extends Rope
-{
-  PatternRope(String nam,String comment)
-  {
-     super
-     (
-        "(?<"+nam+">",
-        ")",
-        null,
-        false
-     );
-     startComment=comment;
-  }
+class PatternRope extends Rope {
+    PatternRope(String nam, String comment) {
+        super("(?<" + nam + ">", ")", null, false);
+        startComment = comment;
+    }
 }

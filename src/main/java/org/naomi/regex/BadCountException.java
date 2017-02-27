@@ -33,24 +33,17 @@
 package org.naomi.regex;
 
 /**
+ *
+ * Thrown when the {@link Policy} of a {@link Pattern} is incompatible with the Pattern's min or max count. (For example, <code>positiveLookahead</code>
+ * requires that min and max count both have their default value of 1.) All such constraints can be found in {@link Policy}.
+ *
+ */
 
-Thrown when the {@link Policy} of a {@link Pattern} is incompatible with the
-Pattern's min or max count.  (For example, <code>positiveLookahead</code>
-requires that min and max count both have their default value of 1.)  All such
-constraints can be found in {@link Policy}.
+public class BadCountException extends RuntimeException {
+    private static final long serialVersionUID = 8619542709892165162L;
 
-*/
+    BadCountException(Pattern pattern) {
+        super(pattern.toString(Verbose.very) + " has incompatible greed and min count and/or max count");
 
-public class BadCountException extends RuntimeException
-{
-   BadCountException(Pattern pattern)
-   {
-     super
-     (
-        pattern.toString(Verbose.very) +
-        " has incompatible greed and min count and/or max count"
-     );
-
-   }
+    }
 }
-

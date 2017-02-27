@@ -32,62 +32,59 @@
  */
 package org.naomi.regex;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
+ *
+ * An instance of IntersectCharClass is a {@link Pattern} which, on each repetition, matches any single character that is in all of the {@link CharClass}es in
+ * the instantiating {@link Collection} or list of {@link CharClass}es.
+ *
+ */
 
-     An instance of IntersectCharClass is a {@link Pattern} which, on each
-     repetition, matches any single character that is in all of the {@link
-     CharClass}es in the instantiating {@link Collection} or list of {@link
-     CharClass}es.
+public class IntersectCharClass extends CharClass {
+    private Collection<CharClass> collection;
 
-*/
+    public IntersectCharClass(Collection<CharClass> collection) {
+        setCollection(collection);
+    }
 
-public class IntersectCharClass extends CharClass
-{
-  private Collection<CharClass> collection;
+    public IntersectCharClass(CharClass... charClass) {
+        setCollection(charClass);
+    }
 
-  public IntersectCharClass(Collection<CharClass> collection)
-  {
-     setCollection(collection);
-  }
+    public IntersectCharClass setCollection(Collection<CharClass> collection) {
+        this.collection = collection;
+        altered();
+        return this;
+    }
 
-  public IntersectCharClass(CharClass ... charClass)
-  {
-     setCollection(charClass);
-  }
+    public IntersectCharClass setCollection(CharClass... charClass) {
+        setCollection(Arrays.asList(charClass));
+        return this;
+    }
 
-  public IntersectCharClass setCollection(Collection<CharClass> collection)
-  {
-     this.collection=collection;
-     altered();
-     return this;
-  }
+    public Collection<CharClass> getCollection() {
+        return collection;
+    }
 
-  public IntersectCharClass setCollection(CharClass ... charClass)
-  {
-     setCollection(Arrays.asList(charClass));
-     return this;
-  }
+    @Override
+    IntersectCharClass fetchInnerString(StringBuilder ans) {
+        join("&&", ans, collection, false);
+        return this;
+    }
 
-  public  Collection<CharClass> getCollection() {return collection;}
+    @Override
+    public IntersectCharClass copy() {
+        IntersectCharClass ans = new IntersectCharClass(getCollection());
+        copyTo(ans);
+        return ans;
+    }
 
-  IntersectCharClass fetchInnerString(StringBuilder ans)
-  {
-     join("&&",ans,collection,false);
-     return this;
-  }
-
-  public IntersectCharClass copy()
-  {
-     IntersectCharClass ans=new IntersectCharClass(getCollection());
-     copyTo(ans);
-     return ans;
-  }
-
-  // De Morgan's laws http://en.wikipedia.org/wiki/De_Morgan%27s_laws
-  public UnionCharClass getComplement()
-  {return new UnionCharClass(complementCollection(collection));}
+    // De Morgan's laws http://en.wikipedia.org/wiki/De_Morgan%27s_laws
+    @Override
+    public UnionCharClass getComplement() {
+        return new UnionCharClass(complementCollection(collection));
+    }
 
 }
-

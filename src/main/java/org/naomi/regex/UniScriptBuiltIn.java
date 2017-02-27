@@ -33,128 +33,35 @@
 package org.naomi.regex;
 
 /**
-     This Enum defines a set of constants, each of which specifies a
-     Unicode "script" of characters to be matched (see below).  Each
-     of these Enum constants can be used to instantiate a {@link BuiltInCharClass}
-     that matches any of the characters in the corresponding Unicode script.
-     For example,
-<p>
-<pre>
-      Pattern Arabic = new BuiltInCharClass(ScriptBuiltIn.ARABIC);
-</pre>
-     matches (on each repetition) one Unicode character in the ARABIC script.
+ * This Enum defines a set of constants, each of which specifies a Unicode "script" of characters to be matched (see below). Each of these Enum constants can be
+ * used to instantiate a {@link BuiltInCharClass} that matches any of the characters in the corresponding Unicode script. For example,
+ * <p>
+ *
+ * <pre>
+ * Pattern Arabic = new BuiltInCharClass(ScriptBuiltIn.ARABIC);
+ * </pre>
+ *
+ * matches (on each repetition) one Unicode character in the ARABIC script.
+ *
+ * @see <a href="http://en.wikipedia.org/wiki/Script_(Unicode)"> Unicode script</a>
+ */
+public enum UniScriptBuiltIn implements BuiltInInterface {
+    // (
+    ARABIC, ARMENIAN, AVESTAN, BALINESE, BAMUM, BATAK, BENGALI, BOPOMOFO, BRAHMI, BRAILLE, BUGINESE, BUHID, CANADIAN_ABORIGINAL, CARIAN, CHAM, CHEROKEE, COMMON, COPTIC, CUNEIFORM, CYPRIOT, CYRILLIC, DESERET, DEVANAGARI, EGYPTIAN_HIEROGLYPHS, ETHIOPIC, GEORGIAN, GLAGOLITIC, GOTHIC, GREEK, GUJARATI, GURMUKHI, HAN, HANGUL, HANUNOO, HEBREW, HIRAGANA, IMPERIAL_ARAMAIC, INHERITED, INSCRIPTIONAL_PAHLAVI, INSCRIPTIONAL_PARTHIAN, JAVANESE, KAITHI, KANNADA, KATAKANA, KAYAH_LI, KHAROSHTHI, KHMER, LAO, LATIN, LEPCHA, LIMBU, LINEAR_B, LISU, LYCIAN, LYDIAN, MALAYALAM, MANDAIC, MEETEI_MAYEK, MONGOLIAN, MYANMAR, NEW_TAI_LUE, NKO, OGHAM, OL_CHIKI, OLD_ITALIC, OLD_PERSIAN, OLD_SOUTH_ARABIAN, OLD_TURKIC, ORIYA, OSMANYA, PHAGS_PA, PHOENICIAN, REJANG, RUNIC, SAMARITAN, SAURASHTRA, SHAVIAN, SINHALA, SUNDANESE, SYLOTI_NAGRI, SYRIAC, TAGALOG, TAGBANWA, TAI_LE, TAI_THAM, TAI_VIET, TAMIL, TELUGU, THAANA, THAI, TIBETAN, TIFINAGH, UGARITIC, UNKNOWN, VAI, YI,
+    // )
+    ;
+    private String string;
 
-@see <a href="http://en.wikipedia.org/wiki/Script_(Unicode)"> Unicode script</a>
-*/
-public enum UniScriptBuiltIn implements BuiltInInterface
-{
-//(
-  ARABIC,
-  ARMENIAN,
-  AVESTAN,
-  BALINESE,
-  BAMUM,
-  BATAK,
-  BENGALI,
-  BOPOMOFO,
-  BRAHMI,
-  BRAILLE,
-  BUGINESE,
-  BUHID,
-  CANADIAN_ABORIGINAL,
-  CARIAN,
-  CHAM,
-  CHEROKEE,
-  COMMON,
-  COPTIC,
-  CUNEIFORM,
-  CYPRIOT,
-  CYRILLIC,
-  DESERET,
-  DEVANAGARI,
-  EGYPTIAN_HIEROGLYPHS,
-  ETHIOPIC,
-  GEORGIAN,
-  GLAGOLITIC,
-  GOTHIC,
-  GREEK,
-  GUJARATI,
-  GURMUKHI,
-  HAN,
-  HANGUL,
-  HANUNOO,
-  HEBREW,
-  HIRAGANA,
-  IMPERIAL_ARAMAIC,
-  INHERITED,
-  INSCRIPTIONAL_PAHLAVI,
-  INSCRIPTIONAL_PARTHIAN,
-  JAVANESE,
-  KAITHI,
-  KANNADA,
-  KATAKANA,
-  KAYAH_LI,
-  KHAROSHTHI,
-  KHMER,
-  LAO,
-  LATIN,
-  LEPCHA,
-  LIMBU,
-  LINEAR_B,
-  LISU,
-  LYCIAN,
-  LYDIAN,
-  MALAYALAM,
-  MANDAIC,
-  MEETEI_MAYEK,
-  MONGOLIAN,
-  MYANMAR,
-  NEW_TAI_LUE,
-  NKO,
-  OGHAM,
-  OL_CHIKI,
-  OLD_ITALIC,
-  OLD_PERSIAN,
-  OLD_SOUTH_ARABIAN,
-  OLD_TURKIC,
-  ORIYA,
-  OSMANYA,
-  PHAGS_PA,
-  PHOENICIAN,
-  REJANG,
-  RUNIC,
-  SAMARITAN,
-  SAURASHTRA,
-  SHAVIAN,
-  SINHALA,
-  SUNDANESE,
-  SYLOTI_NAGRI,
-  SYRIAC,
-  TAGALOG,
-  TAGBANWA,
-  TAI_LE,
-  TAI_THAM,
-  TAI_VIET,
-  TAMIL,
-  TELUGU,
-  THAANA,
-  THAI,
-  TIBETAN,
-  TIFINAGH,
-  UGARITIC,
-  UNKNOWN,
-  VAI,
-  YI,
-//)
-  ;
-  private String string;
+    @Override
+    public CharSequence getPreRegularExpression() {
+        if (string == null) {
+            string = "\\p{Is" + name() + "}";
+        }
+        return string;
+    }
 
-  public CharSequence getPreRegularExpression()
-  {
-     if(string==null)
-        string="\\p{Is"+name()+"}";
-     return string;
-  }
-
-  public String toString() {return getClass().getSimpleName()+"."+name();}
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "." + name();
+    }
 }

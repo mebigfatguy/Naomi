@@ -32,50 +32,51 @@
  */
 package org.naomi.regex;
 
-/** 
-     An instance of BoundaryPattern matches, on each repetition, the left or
-     right boundary (as specified) of some string, e.g., the start or end of a
-     line, word or non-word.  The type of boundary to be matched (word, line,
-     etc.) is specified by the {@link Boundary} used to instantiate the
-     BoundaryPattern.
-*/
+/**
+ * An instance of BoundaryPattern matches, on each repetition, the left or right boundary (as specified) of some string, e.g., the start or end of a line, word
+ * or non-word. The type of boundary to be matched (word, line, etc.) is specified by the {@link Boundary} used to instantiate the BoundaryPattern.
+ */
 
-public class BoundaryPattern extends Pattern
-{
-  private Boundary boundary;
-  private Side side;
+public class BoundaryPattern extends Pattern {
+    private Boundary boundary;
+    private Side side;
 
-  public BoundaryPattern(Side side,Boundary boundary)
-  {
-     setBoundary(side,boundary);
-  }
+    public BoundaryPattern(Side side, Boundary boundary) {
+        setBoundary(side, boundary);
+    }
 
-  /** @return this BoundaryPattern */
-  public BoundaryPattern setBoundary(Side side,Boundary boundary)
-  {
-     this.side=side;
-     this.boundary=boundary;
-     altered();
-     return this;
-  }
+    /** @return this BoundaryPattern */
+    public BoundaryPattern setBoundary(Side side, Boundary boundary) {
+        this.side = side;
+        this.boundary = boundary;
+        altered();
+        return this;
+    }
 
-  public Side getSide() {return side;}
-  public Boundary  getBoundary() {return boundary;}
+    public Side getSide() {
+        return side;
+    }
 
-  Rope getInnerRope()
-  {
-     switch(side)
-     {
-        default:    throw new Bug();
-        case left:  return new CharSequenceRope(boundary.getLeft());
-        case right: return new CharSequenceRope(boundary.getRight());
-     }
-  }
+    public Boundary getBoundary() {
+        return boundary;
+    }
 
-  public BoundaryPattern copy()
-  {
-    BoundaryPattern ans=new BoundaryPattern(getSide(),getBoundary());
-    copyTo(ans);
-    return ans;
-  }
+    @Override
+    Rope getInnerRope() {
+        switch (side) {
+            default:
+                throw new Bug();
+            case left:
+                return new CharSequenceRope(boundary.getLeft());
+            case right:
+                return new CharSequenceRope(boundary.getRight());
+        }
+    }
+
+    @Override
+    public BoundaryPattern copy() {
+        BoundaryPattern ans = new BoundaryPattern(getSide(), getBoundary());
+        copyTo(ans);
+        return ans;
+    }
 }

@@ -33,56 +33,59 @@
 package org.naomi.regex;
 
 /**
+ *
+ * An instance of CharSequencePattern matches, on each repetition, the entire character sequence in the {@link String} or other {@link CharSequence} (e.g.,
+ * {@link java.nio.CharBuffer} or {@link javax.swing.text.Segment} of a character array) used to instantiate the CharSequencePattern. All such characters are
+ * treated literally, that is, there are no escape characters. Note that an instance of this class matches the entire specified sequence of characters in order
+ * (once per repetition); for example:
+ *
+ * <p>
+ *
+ * <pre>
+ * pat = new CharSequenceCharPattern("abC");
+ * pat.setMinAndMaxCount(1, 3);
+ * </pre>
+ *
+ * matches only "abC" or "abCabC" or "abCabCabC"
+ *
+ * <p>
+ * Note that a CharSequencePattern is quite different from a {@link CharClass}, which, on each repetition, matches any single character in the set of characters
+ * that define the CharClass.
+ *
+ */
 
-     An instance of CharSequencePattern matches, on each repetition, the
-     entire character sequence in the {@link String} or other {@link
-     CharSequence} (e.g., {@link java.nio.CharBuffer} or {@link
-     javax.swing.text.Segment} of a character array) used to instantiate the
-     CharSequencePattern.  All such characters are treated literally, that is,
-     there are no escape characters.  Note that an instance of this class
-     matches the entire specified sequence of characters in order (once per
-     repetition); for example:
+public class CharSequencePattern extends Pattern {
+    private CharSequence charSequence;
 
-<p>
-<pre>
-    pat = new CharSequenceCharPattern("abC");
-    pat.setMinAndMaxCount(1,3);
-</pre>
-	matches only "abC" or "abCabC" or "abCabCabC"
+    public CharSequencePattern(CharSequence charSequence) {
+        this.charSequence = charSequence;
+    }
 
-<p>
-    Note that a CharSequencePattern is quite different from a {@link CharClass},
-    which, on each repetition, matches any single character in the set of
-    characters that define the CharClass.
+    public CharSequencePattern(char... ch) {
+        this(new String(ch));
+    }
 
-*/
+    public CharSequence getCharSequence() {
+        return charSequence;
+    }
 
-public class CharSequencePattern extends Pattern
-{
-  private CharSequence charSequence;
+    /** @return this CharSequencePattern */
+    public CharSequencePattern setCharSequence(CharSequence charSequence) {
+        this.charSequence = charSequence;
+        altered();
+        return this;
+    }
 
-  public CharSequencePattern(CharSequence charSequence)
-  {this.charSequence=charSequence;}
+    @Override
+    Rope getInnerRope() {
+        String quote = java.util.regex.Pattern.quote(charSequence.toString());
+        return new CharSequenceRope(quote);
+    }
 
-  public CharSequencePattern(char ... ch) {this(new String(ch));}
-
-  public CharSequence getCharSequence() {return charSequence;}
-
-  /** @return this CharSequencePattern*/
-  public CharSequencePattern setCharSequence(CharSequence charSequence)
-  {this.charSequence=charSequence;altered();return this;}
-
-
-  Rope getInnerRope()
-  {
-     String quote=java.util.regex.Pattern.quote(charSequence.toString());
-     return new CharSequenceRope(quote);
-   }
-
-   public CharSequencePattern copy()
-   {
-     CharSequencePattern ans=new CharSequencePattern(getCharSequence());
-     copyTo(ans);
-     return ans;
-   }
+    @Override
+    public CharSequencePattern copy() {
+        CharSequencePattern ans = new CharSequencePattern(getCharSequence());
+        copyTo(ans);
+        return ans;
+    }
 }

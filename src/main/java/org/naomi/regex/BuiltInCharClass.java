@@ -33,55 +33,54 @@
 package org.naomi.regex;
 
 /**
-
-     An instance of BuiltInCharClass is a {@link Pattern} which, on each
-     repetition, matches any single character in the pre-defined set of
-     characters denoted by its instantiating BuiltIn Enum constant. The internal
-     "Not" flag in each instance can be set to make the class instead match
-     all characters <i>except</i> those in the pre-defined set denoted by its
-     instantiating BuiltIn Enum constant; this has the effect of matching the
-     complement of the specified set of characters.
-
-<p>
-
-A BuiltInCharClass can be instantiated with a constant from any of the enums:
-<pre>
+ *
+ * An instance of BuiltInCharClass is a {@link Pattern} which, on each repetition, matches any single character in the pre-defined set of characters denoted by
+ * its instantiating BuiltIn Enum constant. The internal "Not" flag in each instance can be set to make the class instead match all characters <i>except</i>
+ * those in the pre-defined set denoted by its instantiating BuiltIn Enum constant; this has the effect of matching the complement of the specified set of
+ * characters.
+ *
+ * <p>
+ *
+ * A BuiltInCharClass can be instantiated with a constant from any of the enums:
+ *
+ * <pre>
     {@link CoreBuiltIn}
     {@link LocaleBuiltIn}
     {@link UniBlockBuiltIn}
     {@link UniScriptBuiltIn}
-</pre>
+ * </pre>
+ *
+ */
+public class BuiltInCharClass extends ComplementableCharClass {
+    private BuiltInInterface builtIn;
 
-*/
- public class BuiltInCharClass extends ComplementableCharClass
- {
-  private BuiltInInterface builtIn;
+    public BuiltInCharClass(BuiltInInterface builtIn) {
+        setBuiltIn(builtIn);
+    }
 
-  public BuiltInCharClass(BuiltInInterface builtIn)
-  {
-     setBuiltIn(builtIn);
-  }
+    public BuiltInCharClass setBuiltIn(BuiltInInterface builtIn) {
+        this.builtIn = builtIn;
+        altered();
+        return this;
+    }
 
-  public BuiltInCharClass setBuiltIn(BuiltInInterface builtIn)
-  {
-     this.builtIn=builtIn;
-     altered();
-     return this;
-  }
+    public BuiltInInterface getBuiltIn() {
+        return builtIn;
+    }
 
-  public BuiltInInterface getBuiltIn() {return builtIn;}
+    @Override
+    BuiltInCharClass fetchInnerString(StringBuilder ans) {
+        if (isNot()) {
+            ans.append("^");
+        }
+        ans.append(builtIn.getPreRegularExpression());
+        return this;
+    }
 
-  BuiltInCharClass fetchInnerString(StringBuilder ans)
-  {
-     if(isNot())ans.append("^");
-     ans.append(builtIn.getPreRegularExpression());
-     return this;
-  }
-
-  public BuiltInCharClass copy()
-  {
-    BuiltInCharClass ans=new BuiltInCharClass(getBuiltIn());
-    copyTo(ans);
-    return ans;
-  }
+    @Override
+    public BuiltInCharClass copy() {
+        BuiltInCharClass ans = new BuiltInCharClass(getBuiltIn());
+        copyTo(ans);
+        return ans;
+    }
 }

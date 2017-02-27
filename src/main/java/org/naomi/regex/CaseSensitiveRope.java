@@ -32,42 +32,24 @@
  */
 package org.naomi.regex;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.List;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.nio.file.*;
+class CaseSensitiveRope extends Rope {
+    final private boolean caseSensitive;
 
-class CaseSensitiveRope extends Rope
-{
-  final private boolean caseSensitive;
+    CaseSensitiveRope(boolean caseSensitive) {
+        super(caseSensitive ? null : "(?i:(", caseSensitive ? null : "))", null, false);
+        this.caseSensitive = caseSensitive;
+        if (!caseSensitive) {
+            startComment = "case insensitive";
+        }
+    }
 
-  CaseSensitiveRope(boolean caseSensitive)
-  {
-     super
-     (
-        caseSensitive?   null : "(?i:(",
-        caseSensitive?   null : "))" ,
-        null,
-        false
-      );
-      this.caseSensitive=caseSensitive;
-      if(!caseSensitive)
-        startComment="case insensitive";
-  }
-
-  CharSequence getKidIndentIncrement(Rope kid, Pretty pretty)
-  {
-     if(caseSensitive)
-        return "";
-     else
-        return pretty.indenter;
-  }
+    @Override
+    CharSequence getKidIndentIncrement(Rope kid, Pretty pretty) {
+        if (caseSensitive) {
+            return "";
+        } else {
+            return pretty.indenter;
+        }
+    }
 
 }

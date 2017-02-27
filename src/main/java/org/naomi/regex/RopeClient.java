@@ -32,7 +32,6 @@
  */
 package org.naomi.regex;
 
-interface RopeClient
-{
-  Rope getRope();
+interface RopeClient {
+    Rope getRope();
 }

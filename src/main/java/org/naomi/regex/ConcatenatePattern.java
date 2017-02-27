@@ -33,21 +33,23 @@
 package org.naomi.regex;
 
 /**
-A  ConcatenatePattern matches the concatenation of strings matched by the
-specified instances of {@link Pattern}.
-*/
+ * A ConcatenatePattern matches the concatenation of strings matched by the specified instances of {@link Pattern}.
+ */
 
-public class ConcatenatePattern extends Patterns
-{
-  public ConcatenatePattern(Object ... obs) {super(obs);}
-  String getDelimiter() {return null;}
+public class ConcatenatePattern extends Patterns {
+    public ConcatenatePattern(Object... obs) {
+        super(obs);
+    }
 
-  public ConcatenatePattern copy()
-  {
-     ConcatenatePattern ans=new ConcatenatePattern();
-     copyTo(ans);
-     return ans;
-  }
+    @Override
+    String getDelimiter() {
+        return null;
+    }
+
+    @Override
+    public ConcatenatePattern copy() {
+        ConcatenatePattern ans = new ConcatenatePattern();
+        copyTo(ans);
+        return ans;
+    }
 }
-
-

@@ -32,86 +32,84 @@
  */
 package org.naomi.regex;
 
-
 /**
+ *
+ * An instance of IntervalCharClass is a {@link Pattern} which, on each repetition, matches any single character that lies inclusively (in the normal collating
+ * sequence) between two specified characters. The internal "Not" flag in each instance can be set to make the class instead match all characters <i>except</i>
+ * those in the pre-defined set defined by the instantiating character interval; this has the effect of matching the complement of the specified set of
+ * characters.
+ *
+ */
 
-     An instance of IntervalCharClass is a {@link Pattern} which, on each
-     repetition, matches any single character that lies inclusively (in the
-     normal collating sequence) between two specified characters. The internal
-     "Not" flag in each instance can be set to make the class instead match
-     all characters <i>except</i> those in the pre-defined set defined by the
-     instantiating character interval; this has the effect of matching the
-     complement of the specified set of characters.
+public class IntervalCharClass extends ComplementableCharClass {
+    char left;
+    char right;
 
-*/
+    public IntervalCharClass(char left, char right) {
+        setLeft(left);
+        altered();
+        setRight(right);
+    }
 
-public class  IntervalCharClass extends ComplementableCharClass
-{
-  char left;
-  char right;
+    public IntervalCharClass setLeft(char left) {
+        this.left = left;
+        altered();
+        return this;
+    }
 
-  public IntervalCharClass(char left,char right)
-  {
-     setLeft(left);
-     altered();
-     setRight(right);
-  }
+    public IntervalCharClass setRight(char right) {
+        this.right = right;
+        return this;
+    }
 
-  public IntervalCharClass setLeft(char left)
-  {
-     this.left=left;
-     altered();
-     return this;
-  }
+    public char getLeft() {
+        return left;
+    }
 
-  public IntervalCharClass setRight(char right)
-  {
-     this.right=right;
-     return this;
-  }
+    public char getRight() {
+        return right;
+    }
 
-  public char getLeft() {return left;}
-  public char getRight() {return right;}
+    @Override
+    IntervalCharClass fetchInnerString(StringBuilder ans) {
+        char[] leftChars = { left };
+        char[] rightChars = { right };
+        CharSequence leftString = quote(new String(leftChars));
+        CharSequence rightString = quote(new String(rightChars));
+        if (isNot()) {
+            ans.append("^");
+        }
+        ans.append(leftString + "-" + rightString);
+        if (right < left) {
+            throw new BadIntervalException(left, right);
+        }
+        return this;
+    }
 
-  IntervalCharClass fetchInnerString(StringBuilder ans)
-  {
-     char[] leftChars={left};
-     char[] rightChars={right};
-     CharSequence leftString=quote(new String(leftChars));
-     CharSequence rightString=quote(new String(rightChars));
-     if(isNot()) ans.append("^");
-     ans.append(leftString+"-"+rightString);
-     if(right < left)
-        throw new BadIntervalException(left,right);
-     return this;
-   }
+    @Override
+    public IntervalCharClass copy() {
+        IntervalCharClass ans = new IntervalCharClass(getLeft(), getRight());
+        copyTo(ans);
+        return ans;
+    }
 
-  public IntervalCharClass copy()
-  {
-     IntervalCharClass ans= new IntervalCharClass(getLeft(),getRight());
-     copyTo(ans);
-     return ans;
-  }
+    /**
+     * Thrown when the character values {@code
+     * <code>right</code> < <code>left</code>
+    } (in the normal collating sequence).
+     */
+    public static class BadIntervalException extends RuntimeException {
 
-/**
-Thrown when the character values 
-{@code
-<code>right</code> < <code>left</code>
-}
-(in the normal collating sequence).
-*/
-  public static class BadIntervalException extends RuntimeException
-  {
-     BadIntervalException(String message)
-     {
-        super(message);
-     }
+        private static final long serialVersionUID = 1654183722403833422L;
 
-     BadIntervalException(char left, char right)
-     {
-        this("'"+ left + "' - '"+right+"'");
-     }
+        BadIntervalException(String message) {
+            super(message);
+        }
 
-   }
+        BadIntervalException(char left, char right) {
+            this("'" + left + "' - '" + right + "'");
+        }
+
+    }
 
 }
