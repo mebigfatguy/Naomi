@@ -79,7 +79,7 @@ public class IntervalCharClass extends ComplementableCharClass {
         if (isNot()) {
             ans.append("^");
         }
-        ans.append(leftString + "-" + rightString);
+        ans.append(leftString).append("-").append(rightString);
         if (right < left) {
             throw new BadIntervalException(left, right);
         }
